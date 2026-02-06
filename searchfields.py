@@ -55,3 +55,5 @@ for _file in schemafiles:
         print(TABLE.format(schema=schemaname))
         print("".join(columns))
         print("|}")
+
+# i wanna see if this will sync with the mb solr
