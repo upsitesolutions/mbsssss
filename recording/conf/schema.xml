@@ -40,6 +40,18 @@
   <field name="tracksrelease" type="int" indexed="true" stored="false" multiValued="true" />
   <field name="type" type="lowercase_mult" indexed="true" stored="false" multiValued="true" />
   <field name="video" type="bool" indexed="true" stored="false" required="true" />
+
+
+  <!-- begin custom fields -->
+  <field name="lyrics_original" type="text_lyrics_advanced" indexed="true" stored="true" />
+  <field name="lyrics_processed" type="text_lyrics_advanced" indexed="true" stored="false"
+    multiValued="true" />
+  <copyField source="lyrics_original" dest="lyrics_processed" />
+  <field name="override_title" type="text" indexed="true" stored="true" />
+  <field name="is_jewish" type="bool" indexed="true" stored="true" />
+  <!-- end custom fields -->
+
+
   <!-- Holds data for reponse writer -->
   <field name="_store" type="storefield" indexed="false" stored="true" multiValued="false" required="false" />
   <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml

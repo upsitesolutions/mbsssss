@@ -234,4 +234,52 @@ Copyright (c) 2014, 2015 Wieland Hoffmann, Jeff Weeks
       <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
     </analyzer>
   </fieldType>
+
+
+  <!-- ===================================================================================== -->
+  <!-- CUSTOM: Advanced Lyrics Analyzer (English + Hebrew + Yiddish + HTML cleanup)          -->
+  <!-- ===================================================================================== -->
+
+  <fieldType name="text_lyrics_advanced"
+    class="solr.TextField"
+    positionIncrementGap="100">
+
+    <analyzer>
+
+      <!-- Normalize Yiddish digraphs -->
+      <charFilter class="solr.MappingCharFilterFactory"
+        mapping="common/mapping-yiddish.txt" />
+
+      <!-- Strip dangerous or noisy HTML -->
+      <charFilter class="solr.HTMLStripCharFilterFactory" />
+
+      <!-- Tokenize text -->
+      <tokenizer class="solr.StandardTokenizerFactory" />
+
+      <!-- Remove section markers like [Verse], [Chorus] -->
+      <filter class="solr.PatternReplaceFilterFactory"
+        pattern="\[.*?\]"
+        replacement=""
+        replace="all" />
+
+      <!-- Remove punctuation characters -->
+      <filter class="solr.PatternReplaceFilterFactory"
+        pattern="[,.;:\-_]"
+        replacement=""
+        replace="all" />
+
+      <!-- Remove Hebrew diacritics (niqqud) -->
+      <filter class="solr.PatternReplaceFilterFactory"
+        pattern="[\u0590-\u05CF]"
+        replacement=""
+        replace="all" />
+
+      <!-- Normalize ASCII (fold accents) -->
+      <filter class="solr.ASCIIFoldingFilterFactory" />
+
+      <!-- Normalize case -->
+      <filter class="solr.LowerCaseFilterFactory" />
+
+    </analyzer>
+  </fieldType>
 </types>
