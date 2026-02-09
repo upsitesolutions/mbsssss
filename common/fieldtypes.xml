@@ -253,32 +253,29 @@ Copyright (c) 2014, 2015 Wieland Hoffmann, Jeff Weeks
       <!-- Strip dangerous or noisy HTML -->
       <charFilter class="solr.HTMLStripCharFilterFactory" />
 
-      <!-- Tokenize text -->
-      <tokenizer class="solr.StandardTokenizerFactory" />
+      <!-- Transform [Verse] to space before tokenization to avoid token splitting issues -->
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\[.*?\]" replacement=" " />
 
-      <!-- Remove section markers like [Verse], [Chorus] -->
-      <filter class="solr.PatternReplaceFilterFactory"
-        pattern="\[.*?\]"
-        replacement=""
-        replace="all" />
+      <!-- Tokenize text using MusicBrainz tokenizer -->
+      <tokenizer class="org.musicbrainz.search.analysis.MusicbrainzTokenizerFactory" />
 
-      <!-- Remove punctuation characters -->
-      <filter class="solr.PatternReplaceFilterFactory"
-        pattern="[,.;:\-_]"
-        replacement=""
-        replace="all" />
-
-      <!-- Remove Hebrew diacritics (niqqud) -->
-      <filter class="solr.PatternReplaceFilterFactory"
-        pattern="[\u0590-\u05CF]"
-        replacement=""
-        replace="all" />
+      <!-- Standard MusicBrainz analysis chain -->
+      <filter class="org.musicbrainz.search.analysis.MusicbrainzTokenizerFilterFactory" />
+      <filter class="org.musicbrainz.search.analysis.MusicbrainzWordDelimiterGraphFilterFactory" generateWordParts="1"
+      generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"
+      preserveOriginal="0" splitOnNumerics="0" stemEnglishPossessive="0" />
 
       <!-- Normalize ASCII (fold accents) -->
       <filter class="solr.ASCIIFoldingFilterFactory" />
 
       <!-- Normalize case -->
       <filter class="solr.LowerCaseFilterFactory" />
+
+      <!-- Additional normalization for non-Latin scripts -->
+      <filter class="org.apache.lucene.analysis.icu.ICUTransformFilterFactory"
+      id="[ー[:Script=Katakana:]]Katakana-Hiragana" />
+      <filter class="org.apache.lucene.analysis.icu.ICUTransformFilterFactory" id="Traditional-Simplified" />
+      <filter class="org.apache.lucene.analysis.icu.ICUFoldingFilterFactory" />
 
     </analyzer>
   </fieldType>
