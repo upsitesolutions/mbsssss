@@ -72,3 +72,5 @@ If you are on Ubuntu, simply install tidy via
 To use it, run
 
 > tidy -xml -im -w 120 **xml
+
+<!-- this is a test -->
