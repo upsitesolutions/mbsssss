@@ -51,7 +51,6 @@
   <field name="is_jewish" type="bool" indexed="true" stored="true" />
   <field name="key_value" type="text" indexed="true" stored="true" />
   <field name="is_major" type="bool" indexed="true" stored="true" />
-  <field name="test_field" type="bool" indexed="true" stored="true" />
   <!-- end custom fields -->
 
 
